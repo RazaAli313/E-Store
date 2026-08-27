@@ -105,9 +105,9 @@ const ProductDetailContent = ({ product, backPath }: ProductDetailContentProps):
             <p className='mt-2 text-base text-gray-500'>by {product.brand ?? 'Independent'}</p>
 
             <div className='mt-4 flex flex-wrap items-center gap-2'>
-              <span className='flex text-amber-500' aria-hidden='true'>
+              <span className='flex text-amber-500' aria-label={`${product.rating.toFixed(1)} out of 5 stars`}>
                 {Array.from({ length: 5 }, (_, index) => (
-                  <Star key={index} className='h-5 w-5 fill-current' />
+                  <Star key={index} className={`h-5 w-5 ${index < Math.round(product.rating) ? 'fill-current' : ''}`} />
                 ))}
               </span>
               <span className='font-bold'>{product.rating.toFixed(1)}</span>

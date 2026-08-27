@@ -8,7 +8,6 @@ const envSchema = z.object({
   VITE_SENTRY_SAMPLE_RATE: z.preprocess(val => Number(val), z.number().min(0).max(1)).optional(),
   VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE: z.preprocess(val => Number(val), z.number().min(0).max(1)).optional(),
   VITE_REPLAYS_ON_ERROR_SAMPLE_RATE: z.preprocess(val => Number(val), z.number().min(0).max(1)).optional(),
-  VITE_ENCRYPTED_KEY: z.string().min(1),
 });
 
 let env;

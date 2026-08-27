@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 
-import { ACCESS_TOKEN, DEV_ACCESS_TOKEN } from '#/constants';
-import { getLocalStorageItem, setLocalStorageItem, removeLocalStorageItem } from '#/utils/localStorage';
+import { DEV_ACCESS_TOKEN } from '#/constants';
+import { clearAccessToken, setAccessToken } from '#/services/authToken';
 
 interface AuthContextType {
   token: string | null;
@@ -17,25 +17,21 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const localStorageToken = getLocalStorageItem(ACCESS_TOKEN) as string | null;
-  const initialToken = localStorageToken ?? (import.meta.env.DEV ? DEV_ACCESS_TOKEN : null);
-  const [token, setToken] = useState<string | null>(initialToken);
+  const [token, setToken] = useState<string | null>(() => {
+    const initialToken = import.meta.env.DEV ? DEV_ACCESS_TOKEN : null;
+    setAccessToken(initialToken);
+    return initialToken;
+  });
 
   const login = (newToken: string) => {
     setToken(newToken);
-    setLocalStorageItem(ACCESS_TOKEN, newToken);
+    setAccessToken(newToken);
   };
 
   const logout = () => {
     setToken(null);
-    removeLocalStorageItem(ACCESS_TOKEN);
+    clearAccessToken();
   };
-
-  useEffect(() => {
-    if (!localStorageToken && import.meta.env.DEV) {
-      setLocalStorageItem(ACCESS_TOKEN, DEV_ACCESS_TOKEN);
-    }
-  }, [localStorageToken]);
 
   return <AuthContext.Provider value={{ token, login, logout }}>{children}</AuthContext.Provider>;
 }

@@ -1,9 +1,9 @@
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 
 import { apiEndpoints, GET, PRODUCT_CATEGORY_SELECT, queryKeys } from '#/constants';
 import { performRequest } from '#/services/apiClient';
+import { ApiRequestError } from '#/services/apiRequestError';
 import type { UseGetCategoryProductsProps } from '#/types/products/api.types';
 import type { ProductsResponse } from '#/types/products/product.types';
 
@@ -32,7 +32,7 @@ export const useGetCategoryProducts = ({
           config: { signal },
         });
       } catch (error) {
-        if (isAxiosError(error) && error.response?.status === 404) {
+        if (error instanceof ApiRequestError && error.statusCode === 404) {
           return { products: [], total: 0, skip: 0, limit: 0 };
         }
         throw error;

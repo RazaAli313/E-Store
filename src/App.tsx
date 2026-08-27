@@ -10,16 +10,16 @@ import { AuthProvider, CommerceProvider } from '#/context';
 import { router } from '#/routes';
 import ErrorFallback from './components/errorFallback/ErrorFallback';
 
-function AppContent(): JSX.Element {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        refetchOnWindowFocus: false,
-      },
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
     },
-  });
+  },
+});
 
+function AppContent(): JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { PRODUCT_LIST_SELECT, PRODUCT_PAGE_SIZE } from '#/constants';
 import { useGetCategoryProducts } from '#/data/products/queries/getCategoryProducts';
@@ -39,6 +39,12 @@ export const useProducts = (): UseProductsResult => {
   const total = hasCategory ? filteredCategoryProducts.length : (activeQuery.data?.total ?? 0);
   const totalPages = Math.max(1, Math.ceil(total / PRODUCT_PAGE_SIZE));
 
+  useEffect(() => {
+    if (!activeQuery.isLoading && !activeQuery.isError && page > totalPages) {
+      goToPage(totalPages);
+    }
+  }, [activeQuery.isError, activeQuery.isLoading, goToPage, page, totalPages]);
+
   return {
     products,
     total,
@@ -46,7 +52,7 @@ export const useProducts = (): UseProductsResult => {
     isLoading: activeQuery.isLoading,
     isFetching: activeQuery.isFetching,
     isError: activeQuery.isError,
-    isEmpty: !activeQuery.isLoading && !activeQuery.isError && products.length === 0,
+    isEmpty: !activeQuery.isLoading && !activeQuery.isError && page <= totalPages && products.length === 0,
     refetch: () => {
       void activeQuery.refetch();
     },

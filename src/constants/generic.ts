@@ -1,4 +1,3 @@
-export const ACCESS_TOKEN = 'access_token';
 export const DEV_ACCESS_TOKEN = 'dev-access-token';
 export const GET = 'get';
 export const POST = 'post';

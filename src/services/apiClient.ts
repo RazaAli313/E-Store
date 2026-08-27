@@ -1,5 +1,7 @@
 import type { AxiosRequestConfig, Method } from 'axios';
+import { isAxiosError } from 'axios';
 
+import { ApiRequestError } from './apiRequestError';
 import axiosInstance from './axiosInstance';
 
 /**
@@ -34,12 +36,19 @@ export const performRequest = async <
   params?: TParams;
   config?: AxiosRequestConfig;
 }): Promise<TResponse> => {
-  const res = await axiosInstance.request<TResponse>({
-    method,
-    url,
-    params,
-    data: payload,
-    ...config,
-  });
-  return res.data;
+  try {
+    const res = await axiosInstance.request<TResponse>({
+      method,
+      url,
+      params,
+      data: payload,
+      ...config,
+    });
+    return res.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new ApiRequestError(error.message, error.response?.status, error.response?.data);
+    }
+    throw error;
+  }
 };

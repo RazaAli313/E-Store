@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { ShoppingBag, X } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -14,16 +14,43 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps): JSX.Element | null => {
   const { cartItems, cartCount, subtotal, removeFromCart } = useCommerce();
+  const drawerRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isOpen) return undefined;
 
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
+
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
+      if (event.key !== 'Tab' || !drawerRef.current) return;
+
+      const focusable = Array.from(
+        drawerRef.current.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input, select, textarea')
+      );
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (!first || !last) return;
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     document.addEventListener('keydown', closeOnEscape);
-    return () => document.removeEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape);
+      document.body.style.overflow = previousOverflow;
+      previouslyFocused?.focus();
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -35,13 +62,23 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps): JSX.Element | null =>
 
   return (
     <div className='fixed inset-0 z-50' role='dialog' aria-modal='true' aria-labelledby='cart-title'>
-      <button type='button' aria-label='Close cart' onClick={onClose} className='absolute inset-0 bg-gray-950/45' />
-      <aside className='absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-white shadow-2xl'>
+      <button
+        type='button'
+        tabIndex={-1}
+        aria-hidden='true'
+        onClick={onClose}
+        className='absolute inset-0 bg-gray-950/45'
+      />
+      <aside
+        ref={drawerRef}
+        className='absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-white shadow-2xl'
+      >
         <div className='flex items-center justify-between border-b border-gray-200 px-5 py-5'>
           <h2 id='cart-title' className='text-xl font-extrabold text-gray-950'>
             Your cart ({cartCount})
           </h2>
           <button
+            ref={closeButtonRef}
             type='button'
             onClick={onClose}
             aria-label='Close cart'

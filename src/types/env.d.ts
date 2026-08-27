@@ -9,7 +9,6 @@ declare module '#env' {
     VITE_SENTRY_SAMPLE_RATE?: string | number;
     VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE?: string | number;
     VITE_REPLAYS_ON_ERROR_SAMPLE_RATE?: string | number;
-    VITE_ENCRYPTED_KEY: string;
     [key: string]: EnvValue;
   }
 

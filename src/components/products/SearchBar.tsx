@@ -1,4 +1,5 @@
 import type { ChangeEvent, JSX } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Search } from 'lucide-react';
 
@@ -8,7 +9,18 @@ interface SearchBarProps {
 }
 
 const SearchBar = ({ value, onSearch }: SearchBarProps): JSX.Element => {
-  const updateSearchTerm = (event: ChangeEvent<HTMLInputElement>) => onSearch(event.target.value);
+  const [draftValue, setDraftValue] = useState(value);
+  const updateSearchTerm = (event: ChangeEvent<HTMLInputElement>) => setDraftValue(event.target.value);
+
+  useEffect(() => {
+    setDraftValue(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (draftValue === value) return undefined;
+    const timeoutId = window.setTimeout(() => onSearch(draftValue), 300);
+    return () => window.clearTimeout(timeoutId);
+  }, [draftValue, onSearch, value]);
 
   return (
     <label className='relative min-w-56 flex-1'>
@@ -19,7 +31,7 @@ const SearchBar = ({ value, onSearch }: SearchBarProps): JSX.Element => {
       />
       <input
         type='search'
-        value={value}
+        value={draftValue}
         onChange={updateSearchTerm}
         placeholder='Search products...'
         autoComplete='off'

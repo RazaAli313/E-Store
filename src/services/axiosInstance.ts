@@ -1,9 +1,8 @@
 import axios from 'axios';
 import * as caseConverter from 'change-object-case';
 
-import { ACCESS_TOKEN } from '#/constants';
-import { getLocalStorageItem } from '#/utils';
 import env from '#env';
+import { getAccessToken } from './authToken';
 
 const options = { recursive: true, arrayRecursive: true };
 
@@ -16,7 +15,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(config => {
-  const accessToken = getLocalStorageItem(ACCESS_TOKEN);
+  const accessToken = getAccessToken();
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
 
   if (!(config?.data instanceof FormData)) {
