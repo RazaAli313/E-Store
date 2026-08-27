@@ -28,4 +28,6 @@ dist-ssr
 
 # Git Hooks
 prepare-commit-msg
+CLAUDE.md
+React Learning for Web.md
 
