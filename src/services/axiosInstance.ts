@@ -20,7 +20,9 @@ axiosInstance.interceptors.request.use(config => {
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
 
   if (!(config?.data instanceof FormData)) {
-    const caseConvertedData = caseConverter.snakeKeys(config?.data, options);
+    const caseConvertedData = Array.isArray(config?.data)
+      ? caseConverter.snakeArray(config.data, options)
+      : caseConverter.snakeKeys(config?.data, options);
     config.data = caseConvertedData;
   }
 
@@ -33,7 +35,9 @@ axiosInstance.interceptors.request.use(config => {
 axiosInstance.interceptors.response.use(
   response => {
     if (response.data && typeof response.data === 'object') {
-      response.data = caseConverter.camelKeys(response.data, options);
+      response.data = Array.isArray(response.data)
+        ? caseConverter.camelArray(response.data, options)
+        : caseConverter.camelKeys(response.data, options);
     }
     return response;
   },
