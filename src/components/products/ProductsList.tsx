@@ -41,7 +41,7 @@ const ProductsList = (): JSX.Element => {
   }`;
 
   return (
-    <div className='min-h-screen bg-[#f5f6fb] text-gray-900'>
+    <div className='flex-1 bg-[#f5f6fb] text-gray-900'>
       <StoreHeader>
         <SearchBar value={q} onSearch={setSearch} />
       </StoreHeader>

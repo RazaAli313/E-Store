@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '#/constants';
 
 const NotFound = (): JSX.Element => (
-  <main className='grid min-h-screen place-content-center bg-[#f5f6fb] px-6 text-center text-gray-900'>
+  <main className='grid flex-1 place-content-center bg-[#f5f6fb] px-6 py-20 text-center text-gray-900'>
     <p className='text-sm font-bold uppercase tracking-[0.2em] text-indigo-600'>404</p>
     <h1 className='mt-3 text-4xl font-extrabold tracking-tight'>Page not found</h1>
     <p className='mt-3 text-gray-500'>The page you requested does not exist.</p>

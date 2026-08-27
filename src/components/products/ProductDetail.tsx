@@ -56,7 +56,7 @@ const ProductDetailContent = ({ product, backPath }: ProductDetailContentProps):
   };
 
   return (
-    <div className='min-h-screen bg-[#f5f6fb] text-gray-900'>
+    <div className='flex-1 bg-[#f5f6fb] text-gray-900'>
       <StoreHeader />
       <main className='mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8'>
         <Link
@@ -243,7 +243,7 @@ const ProductDetail = (): JSX.Element => {
 
   if (isLoading) {
     return (
-      <div className='min-h-screen bg-[#f5f6fb]'>
+      <div className='flex-1 bg-[#f5f6fb]'>
         <StoreHeader />
         <main>
           <Spinner label='Loading product details...' />
@@ -254,7 +254,7 @@ const ProductDetail = (): JSX.Element => {
 
   if (isNotFound) {
     return (
-      <div className='min-h-screen bg-[#f5f6fb]'>
+      <div className='flex-1 bg-[#f5f6fb]'>
         <StoreHeader />
         <main>
           <StateMessage
@@ -270,7 +270,7 @@ const ProductDetail = (): JSX.Element => {
 
   if (isError || !product) {
     return (
-      <div className='min-h-screen bg-[#f5f6fb]'>
+      <div className='flex-1 bg-[#f5f6fb]'>
         <StoreHeader />
         <main>
           <StateMessage
