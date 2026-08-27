@@ -6,7 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { AuthProvider } from '#/context';
+import { AuthProvider, CommerceProvider } from '#/context';
 import { router } from '#/routes';
 import ErrorFallback from './components/errorFallback/ErrorFallback';
 
@@ -33,7 +33,9 @@ function App(): JSX.Element {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
       <AuthProvider>
-        <AppContent />
+        <CommerceProvider>
+          <AppContent />
+        </CommerceProvider>
       </AuthProvider>
     </ErrorBoundary>
   );
