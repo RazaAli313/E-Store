@@ -6,20 +6,20 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { AuthProvider } from '#/context';
+import { AuthProvider, CommerceProvider } from '#/context';
 import { router } from '#/routes';
 import ErrorFallback from './components/errorFallback/ErrorFallback';
 
-function AppContent(): JSX.Element {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        refetchOnWindowFocus: false,
-      },
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
     },
-  });
+  },
+});
 
+function AppContent(): JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
@@ -33,7 +33,9 @@ function App(): JSX.Element {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
       <AuthProvider>
-        <AppContent />
+        <CommerceProvider>
+          <AppContent />
+        </CommerceProvider>
       </AuthProvider>
     </ErrorBoundary>
   );

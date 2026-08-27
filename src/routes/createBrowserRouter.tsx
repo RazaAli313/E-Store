@@ -1,13 +1,15 @@
 import type { JSX } from 'react';
 import React, { lazy, Suspense } from 'react';
 
-import { Route, createBrowserRouter, createRoutesFromElements, Navigate } from 'react-router-dom';
+import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 
 import { ROUTES } from '#/constants';
-import { useAuth } from '#/context';
 import { PrivateRoute } from '#/routes/PrivateRoute';
+import RootLayout from './RootLayout';
 
-const Home = lazy(() => import('#/pages/Home'));
+const NotFound = lazy(() => import('#/pages/NotFound'));
+const ProductDetail = lazy(() => import('#/pages/ProductDetail'));
+const Products = lazy(() => import('#/pages/Products'));
 const Unauthorized = lazy(() => import('#/pages/Unauthorized'));
 
 // replace this with your own loading component
@@ -16,11 +18,6 @@ const LoadingFallback = (): JSX.Element => (
     <div className='animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary' />
   </div>
 );
-const RedirectHandler = () => {
-  const { token } = useAuth();
-  return token ? <Navigate to={ROUTES.HOME} replace /> : <Navigate to={ROUTES.AUTH} replace />;
-};
-
 export const createPrivateRoute = (Component: React.ComponentType): JSX.Element => {
   return (
     <PrivateRoute>
@@ -33,8 +30,9 @@ export const createPrivateRoute = (Component: React.ComponentType): JSX.Element 
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
-      <Route path={ROUTES.HOME} element={createPrivateRoute(Home)} />
+    <Route element={<RootLayout />}>
+      <Route path={ROUTES.HOME} element={createPrivateRoute(Products)} />
+      <Route path={ROUTES.PRODUCT_DETAIL} element={createPrivateRoute(ProductDetail)} />
       <Route
         path={ROUTES.UN_AUTHORIZED}
         element={
@@ -43,8 +41,15 @@ export const router = createBrowserRouter(
           </Suspense>
         }
       />
-      <Route path='*' element={<RedirectHandler />} />
-    </>
+      <Route
+        path='*'
+        element={
+          <Suspense fallback={<LoadingFallback />}>
+            <NotFound />
+          </Suspense>
+        }
+      />
+    </Route>
   ),
   { basename: '/app' }
 );
