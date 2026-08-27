@@ -1,9 +1,5 @@
 export const ACCESS_TOKEN = 'access_token';
-export const DEV_ACCESS_TOKEN = 'dev-access-token';
 export const GET = 'get';
 export const POST = 'post';
 export const PUT = 'put';
 export const DELETE = 'delete';
-export const PRODUCT_PAGE_SIZE = 12;
-export const PRODUCT_LIST_SELECT = 'title,price,thumbnail,rating,category,stock,brand,discountPercentage';
-export const PRODUCT_CATEGORY_SELECT = `${PRODUCT_LIST_SELECT},description`;
