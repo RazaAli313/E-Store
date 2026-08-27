@@ -7,8 +7,7 @@ import { ROUTES } from '#/constants';
 import { useAuth } from '#/context';
 import { PrivateRoute } from '#/routes/PrivateRoute';
 
-const ProductDetail = lazy(() => import('#/pages/ProductDetail'));
-const Products = lazy(() => import('#/pages/Products'));
+const Home = lazy(() => import('#/pages/Home'));
 const Unauthorized = lazy(() => import('#/pages/Unauthorized'));
 
 // replace this with your own loading component
@@ -35,8 +34,7 @@ export const createPrivateRoute = (Component: React.ComponentType): JSX.Element 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path={ROUTES.HOME} element={createPrivateRoute(Products)} />
-      <Route path={ROUTES.PRODUCT_DETAIL} element={createPrivateRoute(ProductDetail)} />
+      <Route path={ROUTES.HOME} element={createPrivateRoute(Home)} />
       <Route
         path={ROUTES.UN_AUTHORIZED}
         element={
